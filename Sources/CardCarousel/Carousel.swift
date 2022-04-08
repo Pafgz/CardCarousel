@@ -7,8 +7,10 @@
 
 import SwiftUI
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollection, ID: Hashable, Data.Element: Equatable, Content: View {
+
     @ObservedObject private var viewModel: CarouselViewModel<Data, ID>
     private let content: (Data.Element) -> Content
 
@@ -35,7 +37,7 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
                     .offset(viewModel.offset(item))
             }
         }
-        .offset(x: viewModel.offset)
+//        .offset(x: viewModel.offset)
         .gesture(viewModel.dragGesture)
         .animation(viewModel.offsetAnimation, value: viewModel.offset)
     }
@@ -54,6 +56,7 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
 
 // MARK: - Initializers
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension Carousel where Data.Element: Equatable {
     /// Creates an instance that uniquely identifies and creates views across
@@ -90,6 +93,7 @@ extension Carousel where Data.Element: Equatable {
     }
 }
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension Carousel where ID == Data.Element.ID, Data.Element: Identifiable {
     /// Creates an instance that uniquely identifies and creates views across
@@ -122,6 +126,7 @@ extension Carousel where ID == Data.Element.ID, Data.Element: Identifiable {
     }
 }
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 struct Carousel_Previews: PreviewProvider {
     static func content(color: Color) -> some View {
@@ -133,7 +138,7 @@ struct Carousel_Previews: PreviewProvider {
     }
 
     static var previews: some View {
-        let colors: [Color] = [.black, .red, .blue, .green]
+        let colors: [Color] = [.blue, .red, .black, .gray, .green]
         Group {
             Carousel(colors, id: \.self, isLooping: true, content: { color in
                 content(color: color)

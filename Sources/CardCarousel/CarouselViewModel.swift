@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 class CarouselViewModel<Data, ID>: ObservableObject where Data: RandomAccessCollection, ID: Hashable, Data.Element: Equatable {
     /// external index
@@ -50,6 +51,7 @@ class CarouselViewModel<Data, ID>: ObservableObject where Data: RandomAccessColl
     var viewSize: CGSize = .zero
 }
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension CarouselViewModel where ID == Data.Element.ID, Data.Element: Identifiable {
     convenience init(_ data: Data, index: Binding<Int>, sidesScaling: CGFloat, isLooping: Bool, canMove: Bool) {
@@ -57,6 +59,7 @@ extension CarouselViewModel where ID == Data.Element.ID, Data.Element: Identifia
     }
 }
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension CarouselViewModel {
     var data: Data {
@@ -71,7 +74,7 @@ extension CarouselViewModel {
         guard isLooping else {
             return .spring()
         }
-        return isAnimatedOffset ? .spring() : .none
+        return isAnimatedOffset ? .easeIn : .none
     }
 
     var itemWidth: CGFloat {
@@ -152,6 +155,7 @@ extension CarouselViewModel {
 
 // MARK: - private variable
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension CarouselViewModel {
     private var isLooping: Bool {
@@ -171,6 +175,7 @@ extension CarouselViewModel {
 
 // MARK: - Offset Method
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension CarouselViewModel {
     /// current offset value
@@ -179,10 +184,16 @@ extension CarouselViewModel {
     }
 
     func offset(_ item: Data.Element) -> CGSize {
+        let dragThreshold: CGFloat = itemWidth / 20
+
         if item == previousItem {
-            return CGSize(width: -25, height: 0)
+            let offset = min(-25, dragOffset)
+            return CGSize(width: offset, height: 0)
         } else if item == nextItem {
-            return CGSize(width: 25, height: 0)
+            let offset = max(dragOffset, 25)
+            return CGSize(width: offset, height: 0)
+        } else if item == activeItem {
+                return CGSize(width: offset, height: 0)
         } else {
             return CGSize(width: 0, height: 0)
         }
@@ -191,6 +202,7 @@ extension CarouselViewModel {
 
 // MARK: - Drag Gesture
 
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 extension CarouselViewModel {
     /// drag gesture of view
@@ -205,17 +217,18 @@ extension CarouselViewModel {
 
         isAnimatedOffset = true
 
+        let dragValue = value.translation.width
         /// Defines the maximum value of the drag
         /// Avoid dragging more than the values of multiple subviews at the end of the drag,
         /// and still only one subview is toggled
-        var offset: CGFloat = 4
-        if value.translation.width > 0 {
-            offset = min(offset, value.translation.width / 4)
-        } else {
-            offset = max(-offset, value.translation.width / 4)
-        }
+//        var offset: CGFloat = 4
+//        if dragValue > 0 {
+//            offset = min(offset, dragValue / 4)
+//        } else {
+//            offset = max(-offset, dragValue / 4)
+//        }
         /// set drag offset
-        dragOffset = offset
+        dragOffset = dragValue
     }
 
     private func dragEnded(_ value: DragGesture.Value) {
@@ -228,7 +241,7 @@ extension CarouselViewModel {
         /// the active view will be toggled
         /// default is one fourth of subview
         let dragThreshold: CGFloat = itemWidth / 5
-
+//
         var activeIndex = self.activeIndex
         if value.translation.width > dragThreshold {
             activeIndex -= 1
@@ -250,6 +263,7 @@ extension CarouselViewModel {
     }
 }
 
+@available(macOS 10.15, *)
 private extension UserDefaults {
     private enum Keys {
         static let isAnimatedOffset = "isAnimatedOffset"
