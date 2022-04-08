@@ -74,7 +74,7 @@ extension CarouselViewModel {
         guard isLooping else {
             return .spring()
         }
-        return isAnimatedOffset ? .easeIn : .none
+        return isAnimatedOffset ? .spring() : .none
     }
 
     var itemWidth: CGFloat {
@@ -138,6 +138,10 @@ extension CarouselViewModel {
         }
         return isActiveItem(item) ? 1 : sidesScaling
     }
+    
+    func itemOpacity(_ item: Data.Element) -> CGFloat {
+        return isActiveItem(item) || isPreviousItem(item) || isNextItem(item) ? 1 : 0
+    }
 
     /// Defines the scaling based on whether the item is currently active or not.
     /// - Parameter item: The incoming item
@@ -184,8 +188,6 @@ extension CarouselViewModel {
     }
 
     func offset(_ item: Data.Element) -> CGSize {
-        let dragThreshold: CGFloat = itemWidth / 20
-
         if item == previousItem {
             let offset = min(-25, dragOffset)
             return CGSize(width: offset, height: 0)
@@ -193,7 +195,9 @@ extension CarouselViewModel {
             let offset = max(dragOffset, 25)
             return CGSize(width: offset, height: 0)
         } else if item == activeItem {
-                return CGSize(width: offset, height: 0)
+            let isSwipingRight = offset > 0
+            let activeItemOffset = isSwipingRight ? min(itemWidth / CGFloat(3), offset) : max(-itemWidth / CGFloat(3), offset)
+            return CGSize(width: activeItemOffset, height: 0)
         } else {
             return CGSize(width: 0, height: 0)
         }
