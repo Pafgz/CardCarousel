@@ -35,9 +35,9 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
                     .scaleEffect(x: 1, y: viewModel.itemScaling(item), anchor: .center)
                     .zIndex(viewModel.zIndex(item))
                     .offset(viewModel.offset(item))
+                    .opacity(viewModel.itemOpacity(item))
             }
         }
-//        .offset(x: viewModel.offset)
         .gesture(viewModel.dragGesture)
         .animation(viewModel.offsetAnimation, value: viewModel.offset)
     }
