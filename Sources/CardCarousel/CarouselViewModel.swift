@@ -1,6 +1,6 @@
 //
 //  CarouselViewModel.swift
-//  
+//
 //
 //  Created by Pierre-Antoine Fagniez on 08/04/2022.
 //
