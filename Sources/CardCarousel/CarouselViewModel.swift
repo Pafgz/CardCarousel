@@ -8,8 +8,6 @@
 import Combine
 import SwiftUI
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 class CarouselViewModel<Data, ID>: ObservableObject where Data: RandomAccessCollection, ID: Hashable, Data.Element: Equatable {
     /// external index
     @Binding private var index: Int
@@ -51,16 +49,12 @@ class CarouselViewModel<Data, ID>: ObservableObject where Data: RandomAccessColl
     var viewSize: CGSize = .zero
 }
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension CarouselViewModel where ID == Data.Element.ID, Data.Element: Identifiable {
     convenience init(_ data: Data, index: Binding<Int>, sidesScaling: CGFloat, isLooping: Bool, canMove: Bool) {
         self.init(data, id: \.id, index: index, sidesScaling: sidesScaling, isLooping: isLooping, canMove: canMove)
     }
 }
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension CarouselViewModel {
     var data: Data {
         return _data
@@ -158,9 +152,6 @@ extension CarouselViewModel {
 }
 
 // MARK: - private variable
-
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension CarouselViewModel {
     private var isLooping: Bool {
         return _data.count > 1 ? _isLooping : false
@@ -178,9 +169,6 @@ extension CarouselViewModel {
 }
 
 // MARK: - Offset Method
-
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension CarouselViewModel {
     /// current offset value
     var offset: CGFloat {
@@ -205,9 +193,6 @@ extension CarouselViewModel {
 }
 
 // MARK: - Drag Gesture
-
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension CarouselViewModel {
     /// drag gesture of view
     var dragGesture: some Gesture {
@@ -245,7 +230,7 @@ extension CarouselViewModel {
         /// the active view will be toggled
         /// default is one fourth of subview
         let dragThreshold: CGFloat = itemWidth / 5
-//
+
         var activeIndex = self.activeIndex
         if value.translation.width > dragThreshold {
             activeIndex -= 1
@@ -267,7 +252,6 @@ extension CarouselViewModel {
     }
 }
 
-@available(macOS 10.15, *)
 private extension UserDefaults {
     private enum Keys {
         static let isAnimatedOffset = "isAnimatedOffset"

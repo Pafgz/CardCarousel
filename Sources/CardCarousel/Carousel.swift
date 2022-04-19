@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollection, ID: Hashable, Data.Element: Equatable, Content: View {
 
     @ObservedObject private var viewModel: CarouselViewModel<Data, ID>
@@ -55,10 +53,6 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
     }
 }
 
-// MARK: - Initializers
-
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension Carousel where Data.Element: Equatable {
     /// Creates an instance that uniquely identifies and creates views across
     /// updates based on the identity of the underlying data.
@@ -94,8 +88,6 @@ extension Carousel where Data.Element: Equatable {
     }
 }
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 extension Carousel where ID == Data.Element.ID, Data.Element: Identifiable {
     /// Creates an instance that uniquely identifies and creates views across
     /// updates based on the identity of the underlying data.
@@ -127,8 +119,6 @@ extension Carousel where ID == Data.Element.ID, Data.Element: Identifiable {
     }
 }
 
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
 struct Carousel_Previews: PreviewProvider {
     static func content(color: Color) -> some View {
         VStack {
