@@ -25,7 +25,8 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
         VStack(spacing: 0) {
             mainContent(proxy: proxy)
             indicators.padding(.top, 32)
-        }.frame(width: proxy.size.width, height: proxy.size.height)
+        }
+        .frame(width: proxy.size.width, height: proxy.size.height)
     }
 
     private func mainContent(proxy: GeometryProxy) -> some View {
